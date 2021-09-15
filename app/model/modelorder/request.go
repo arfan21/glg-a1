@@ -1,12 +1,17 @@
 package modelorder
 
+import "time"
+
 type OrderRequest struct {
-	CustomerName string        `json:"customer_name"`
+	OrderID      int           `json:"orderId,omitempty"`
+	CustomerName string        `json:"customerName"`
+	OrderedAt    time.Time     `json:"orderedAt"`
 	Items        []ItemRequest `json:"items"`
 }
 
 type ItemRequest struct {
-	ItemCode    string `json:"item_code"`
+	ItemId      int    `json:"itemId,omitempty"`
+	ItemCode    string `json:"itemCode"`
 	Description string `json:"description"`
 	Quantity    int    `json:"quantity"`
 }

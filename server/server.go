@@ -6,12 +6,13 @@ import (
 	"net/http"
 
 	"github.com/arfan21/hacktiv8-assignment-2/config"
+	"github.com/arfan21/hacktiv8-assignment-2/config/mysql"
 )
 
 func Start() {
 	cfg := config.New()
-	// mysqlClient := mysql.New(cfg)
-	// defer mysqlClient.Close()
+	mysqlClient := mysql.New(cfg)
+	defer mysqlClient.Close()
 
 	port := cfg.Get("PORT")
 	if port == "" {
@@ -22,7 +23,7 @@ func Start() {
 		baseUrl = "http://localhost"
 	}
 
-	muxRouter := NewRouter()
+	muxRouter := NewRouter(mysqlClient)
 	log.Println("HTTP server listening on " + baseUrl + ":" + port)
 	http.ListenAndServe(fmt.Sprintf(":%s", port), muxRouter)
 }

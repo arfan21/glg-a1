@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/arfan21/hacktiv8-assignment-2/app/model/modelorder"
 	"github.com/arfan21/hacktiv8-assignment-2/config"
 	"github.com/arfan21/hacktiv8-assignment-2/helper"
 	"gorm.io/driver/mysql"
@@ -21,7 +22,7 @@ func New(configuration config.Config) Client {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	helper.PanicIfNeeded(err)
 
-	err = db.AutoMigrate()
+	err = db.AutoMigrate(modelorder.Order{}, modelorder.Item{})
 	helper.PanicIfNeeded(err)
 
 	log.Println("MySql Connected")

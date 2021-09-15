@@ -12,7 +12,7 @@ type Order struct {
 }
 
 type Item struct {
-	ItemId      int    `json:"item_id"`
+	ItemId      int    `json:"item_id" gorm:"primaryKey;autoIncrement"`
 	ItemCode    string `json:"item_code"`
 	Description string `json:"description"`
 	Quantity    int    `json:"quantity"`
@@ -21,9 +21,12 @@ type Item struct {
 
 func (o *Order) SetFromRequest(orderRequest OrderRequest) {
 	o.CustomerName = orderRequest.CustomerName
+	o.OrderedAt = orderRequest.OrderedAt
+	o.OrderID = orderRequest.OrderID
 
 	for _, item := range orderRequest.Items {
 		newItem := Item{}
+		newItem.ItemId = item.ItemId
 		newItem.ItemCode = item.ItemCode
 		newItem.Description = item.Description
 		newItem.Quantity = item.Quantity
