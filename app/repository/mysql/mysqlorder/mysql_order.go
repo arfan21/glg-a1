@@ -2,10 +2,12 @@ package mysqlorder
 
 import (
 	"context"
+	"log"
 
 	"github.com/arfan21/hacktiv8-assignment-2/app/model/modelorder"
 	"github.com/arfan21/hacktiv8-assignment-2/config/mysql"
 	"github.com/arfan21/hacktiv8-assignment-2/helper"
+	"gorm.io/gorm"
 )
 
 type Repository interface {
@@ -39,7 +41,7 @@ func (r *repository) GetAll(ctx context.Context) []modelorder.Order {
 }
 
 func (r *repository) Update(ctx context.Context, order modelorder.Order) modelorder.Order {
-	err := r.client.Conn().WithContext(ctx).Updates(&order).Error
+	err := r.client.Conn().WithContext(ctx).Session(&gorm.Session{FullSaveAssociations: true}).Updates(&order).Error
 	helper.PanicIfNeeded(err)
 
 	return order
@@ -47,5 +49,6 @@ func (r *repository) Update(ctx context.Context, order modelorder.Order) modelor
 
 func (r *repository) Delete(ctx context.Context, orderId int) {
 	err := r.client.Conn().WithContext(ctx).Delete(&modelorder.Order{}, orderId).Error
+	log.Println(err)
 	helper.PanicIfNeeded(err)
 }

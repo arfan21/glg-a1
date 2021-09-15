@@ -31,12 +31,12 @@ PUT http://localhost:8000/orders HTTP/1.1
 content-type: application/json
 
 {
-    "orderId": 1,
+    "orderId": 2,
     "orderedAt":"2019-11-09T21:21:46Z",
     "customerName":"Spike Tyke 2 asdas",
     "items":[
         {
-            "itemId": 1,
+            "itemId": 4,
             "itemCode":"123",
             "description":"IPhone 10X233 asdas 4",
             "quantity": 10
