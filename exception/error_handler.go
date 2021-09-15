@@ -31,6 +31,12 @@ func clientError(w http.ResponseWriter, r *http.Request, err interface{}) bool {
 		return true
 	}
 
+	if newErr, ok := err.(ErrorClient); ok {
+		res.Data = newErr.Message
+		helper.WriteJSON(w, newErr.StatusCode, res)
+		return true
+	}
+
 	return false
 }
 

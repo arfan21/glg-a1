@@ -2,10 +2,10 @@ package mysqlorder
 
 import (
 	"context"
-	"log"
 
 	"github.com/arfan21/hacktiv8-assignment-2/app/model/modelorder"
 	"github.com/arfan21/hacktiv8-assignment-2/config/mysql"
+	"github.com/arfan21/hacktiv8-assignment-2/exception"
 	"github.com/arfan21/hacktiv8-assignment-2/helper"
 	"gorm.io/gorm"
 )
@@ -48,7 +48,10 @@ func (r *repository) Update(ctx context.Context, order modelorder.Order) modelor
 }
 
 func (r *repository) Delete(ctx context.Context, orderId int) {
-	err := r.client.Conn().WithContext(ctx).Delete(&modelorder.Order{}, orderId).Error
-	log.Println(err)
-	helper.PanicIfNeeded(err)
+	tx := r.client.Conn().WithContext(ctx).Where("order_id = ?", orderId).Delete(&modelorder.Order{})
+	helper.PanicIfNeeded(tx.Error)
+
+	if tx.RowsAffected < 1 {
+		panic(exception.ErrorClient{StatusCode: 404, Message: "NOT FOUND"})
+	}
 }
