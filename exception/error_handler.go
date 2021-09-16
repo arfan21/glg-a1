@@ -55,5 +55,4 @@ func internalServerError(w http.ResponseWriter, r *http.Request, err interface{}
 		res.Data = err
 		helper.WriteJSON(w, http.StatusInternalServerError, res)
 	}
-
 }
