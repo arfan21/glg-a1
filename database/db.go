@@ -2,21 +2,32 @@ package database
 
 import (
 	"fmt"
+	"os"
 
-	"gorm.io/driver/mysql"
+	"github.com/arfan21/hacktiv8-golang-jwt/model"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var db *gorm.DB
 
 func StartDB() error {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", "root", "root", "127.0.0.1", "3306", "test")
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+	dbPort := os.Getenv("DB_PORT")
 
-	gormDB, err := gorm.Open(mysql.Open(dsn))
+	config := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=require TimeZone=Asia/Shanghai", host, user, password, dbname, dbPort)
+
+	gormDB, err := gorm.Open(postgres.Open(config))
 	if err != nil {
 		return err
 	}
 	db = gormDB
+
+	db.Debug().AutoMigrate(model.User{}, model.Product{})
+
 	return nil
 }
 
