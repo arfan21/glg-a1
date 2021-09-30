@@ -1,1 +1,1 @@
-web: bin/hacktiv8-golang-jwt
+web: hacktiv8-golang-jwt
